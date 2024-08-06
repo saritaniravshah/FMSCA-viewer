@@ -1,10 +1,10 @@
 import {
   Box,
   Button,
-  ListItemIcon,
+  IconButton,
   Menu,
   MenuItem,
-  lighten,
+  Typography,
 } from "@mui/material";
 import {
   MRT_ColumnDef,
@@ -18,7 +18,7 @@ import { useMemo, useState } from "react";
 import { DateTime } from "luxon";
 
 import useCSVParser from "../../hooks/useCSVParser";
-import { Check } from "@mui/icons-material";
+import { Cancel, Search } from "@mui/icons-material";
 
 export const DataTable = () => {
   const { data, loading, columns } = useCSVParser({
@@ -27,6 +27,7 @@ export const DataTable = () => {
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [grouping, setGrouping] = useState<null | string>("");
+  const [showSearch, setShowSearch] = useState<boolean>(false);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -109,9 +110,12 @@ export const DataTable = () => {
     enableDensityToggle: false,
     enableFullScreenToggle: false,
     enableColumnDragging: false,
+    enableGlobalFilter: true,
     state: {
+      showGlobalFilter: true,
       density: "compact",
-      isLoading: loading, //cell skeletons and loading overlay
+      isLoading: loading, //cell skeletons and loading overlay,
+      showProgressBars: loading,
     },
     muiTableBodyRowProps: {
       sx: {
@@ -132,12 +136,18 @@ export const DataTable = () => {
             justifyContent: "space-between",
           }}
         >
-          <Box sx={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
-            <MRT_ToggleFiltersButton table={table} />
-            <MRT_GlobalFilterTextField table={table} />
-          </Box>
-          <Box>
-            <Box sx={{ display: "flex", gap: "0.5rem" }}>
+          <Typography variant="h4">FMSCA Table</Typography>
+
+          <Box sx={{ display: "flex", gap: "0.5rem" }}>
+            <Box sx={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
+              {showSearch && <MRT_GlobalFilterTextField table={table} />}
+
+              <IconButton onClick={() => setShowSearch((prev) => !prev)}>
+                {showSearch ? <Cancel /> : <Search />}
+              </IconButton>
+
+              <MRT_ToggleFiltersButton table={table} />
+
               <Button
                 aria-controls="date-groupby-menu"
                 aria-haspopup="true"
