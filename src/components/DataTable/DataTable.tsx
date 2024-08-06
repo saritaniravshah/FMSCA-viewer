@@ -53,6 +53,20 @@ export const DataTable = () => {
         ...col,
         header: col.headerName,
         accessorKey: col.field,
+        ...(["created_dt", "data_source_modified_dt"].includes(col.field) && {
+          sortingFn: (rowA, rowB, columnId) => {
+            return DateTime.fromFormat(
+              rowA.getValue(columnId),
+              "dd LLL, yyyy hh:MM a"
+            ) >
+              DateTime.fromFormat(
+                rowB.getValue(columnId),
+                "dd LLL, yyyy hh:MM a"
+              )
+              ? -1
+              : 1;
+          },
+        }),
       })) as MRT_ColumnDef<any, string>[],
     [columns]
   );
@@ -115,6 +129,7 @@ export const DataTable = () => {
       showGlobalFilter: true,
       density: "compact",
       isLoading: loading, //cell skeletons and loading overlay,
+      showLoadingOverlay: false,
       showProgressBars: loading,
     },
     muiTableBodyRowProps: {
