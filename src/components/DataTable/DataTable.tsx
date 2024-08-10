@@ -127,7 +127,7 @@ export const DataTable = ({ isPivotVersion = false }: IDataTableProps) => {
 
   const parsedData = useMemo(
     () =>
-      data.slice(1,1001).map((dataItem) => ({
+      data.slice(1,10001).map((dataItem) => ({
         ...dataItem,
         created_dt: DateTime.fromJSDate(new Date(dataItem.created_dt)).toFormat(
           "dd LLL, yyyy hh:MM a"
