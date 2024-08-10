@@ -1,12 +1,12 @@
 import { Box } from "@mui/material";
 
 import "./App.css";
-import { DataTable } from "./components";
+import { DataTable, PivotTable, Tabs } from "./components";
 
 function App() {
   return (
-    <Box sx={{ height: "100vh", bgcolor: "darkgray" }}>
-      <DataTable />
+    <Box>
+      <Tabs tableView={<DataTable />} pivotView={<PivotTable />} />
     </Box>
   );
 }
